@@ -1,0 +1,61 @@
+--- /usr/share/pve-manager/js/pvemanagerlib.js.bak	2024-05-20 23:43:14.251977971 +0200
++++ /usr/share/pve-manager/js/pvemanagerlib.js	2024-05-21 09:20:18.523943575 +0200
+@@ -44998,7 +44998,6 @@
+     extend: 'Proxmox.panel.StatusView',
+     alias: 'widget.pveNodeStatus',
+ 
+-    height: 350,
+     bodyPadding: '15 5 15 5',
+ 
+     layout: {
+@@ -45079,6 +45078,50 @@
+ 	    maxField: 'swap',
+ 	    renderer: Proxmox.Utils.render_node_size_usage,
+ 	},
++        {
++	    itemId: 'thermal',
++	    printBar: false,
++	    title: gettext('CPU Thermal State'),
++	    textField: 'thermalstate',
++	    renderer: function(value) {
++	        function p(t) {
++	            let s = "";
++	            if (t < 70) {
++	                s = '❄️';
++	            } else {
++	                s = '🔥';
++	            }
++	            return `${s} ${t}°C`;
++	        }
++	        let objValue = JSON.parse(value);
++	        let core0 = p(objValue["coretemp-isa-0000"]["Core 0"]["temp2_input"]);
++	        let core1 = p(objValue["coretemp-isa-0000"]["Core 1"]["temp3_input"]);
++	        let core2 = p(objValue["coretemp-isa-0000"]["Core 2"]["temp4_input"]);
++	        let core3 = p(objValue["coretemp-isa-0000"]["Core 3"]["temp5_input"]);
++	        return `${core0} | ${core1} | ${core2} | ${core3}`;
++	    }
++	},
++	{
++	    itemId: 'thermaldrive',
++	    printBar: false,
++	    title: gettext('HDD Thermal State'),
++	    textField: 'thermalstate',
++	    renderer: function(value) {
++	        function p(t) {
++	            let s = "";
++	            if (t < 50) {
++	                s = '❄️';
++	            } else {
++	                s = '🔥';
++	            }
++	            return `${s} ${t}°C`;
++	        }
++	        let objValue = JSON.parse(value);
++	        let hdd1 = p(objValue["drivetemp-scsi-0-0"]["temp1"]["temp1_input"]);
++	        let hdd2 = p(objValue["drivetemp-scsi-1-0"]["temp1"]["temp1_input"]);
++	        return `sda: ${hdd1} | sdb: ${hdd2}`;
++	    }
++	},
+ 	{
+ 	    xtype: 'box',
+ 	    colspan: 2,

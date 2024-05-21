@@ -1,0 +1,11 @@
+--- /usr/share/perl5/PVE/API2/Nodes.pm.bak	2024-05-20 23:38:57.731904657 +0200
++++ /usr/share/perl5/PVE/API2/Nodes.pm	2024-05-21 00:05:53.568584748 +0200
+@@ -486,6 +486,8 @@
+ 	$res->{pveversion} = PVE::pvecfg::package() . "/" .
+ 	    PVE::pvecfg::version_text();
+ 
++	$res->{thermalstate} = `sensors -j`;
++	
+ 	my $dinfo = df('/', 1);     # output is bytes
+ 
+ 	$res->{rootfs} = {
