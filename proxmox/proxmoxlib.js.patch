@@ -1,0 +1,11 @@
+--- /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js.bak      2024-05-22 08:30:33.487164182 +0200
++++ /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js  2024-05-22 08:32:08.821659416 +0200
+@@ -551,6 +551,8 @@
+     alertResponseFailure: res => Ext.Msg.alert(gettext('Error'), res.htmlStatus || res.result.message),
+ 
+     checked_command: function(orig_cmd) {
++       orig_cmd();
++       return;
+        Proxmox.Utils.API2Request(
+            {
+                url: '/nodes/localhost/subscription',
